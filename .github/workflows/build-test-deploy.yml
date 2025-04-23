@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     needs: test
-
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pages: write     
@@ -39,9 +39,7 @@ jobs:
     environment:
       name: production
       url: ${{ steps.deployment.outputs.page_url }}
-    
-    runs-on: ubuntu-latest
-    
+      
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
@@ -62,3 +60,5 @@ jobs:
         with: 
           path: './out'
       - name: deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
