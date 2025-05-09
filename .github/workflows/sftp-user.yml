@@ -19,21 +19,25 @@ on:
             type: string
             description: Bucket path required
             required: true
+          nd_sftp_password:
+            type: string
+            description: Password
+            required: true
 jobs:
   send-data:
-    runs-on:
-      group: ${{ vars.RUNNER_SMALL_GROUP_NAME }}
+    runs-on: ubuntu-latest
     steps:
       - name: Send POST request to Web API
         run: |
+          if [ "${{ inputs.nd_sftp_password }}" == "" ]; then ${{ inputs.nd_sftp_password }}=$(pwgen 30 1); fi
           curl -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com \
             -H "Content-Type: application/json" \
             -d '{
               "UserName": "${{ inputs.nd_sftp_username }}",
-              "Password": "${USER_PASS}",
+              "Password": "${{ inputs.nd_sftp_password }}",
               "Target": [{
                 "Entry": "${{ inputs.nd_sftp_targetpath }}",
                 "Target": "/${{ inputs.nd_sftp_bucketname }}/${{ inputs.nd_sftp_bucketpath }}"
               }],
               "RoleName": "Production-Transfer-ServiceRole"
-            }'
+            }'         
