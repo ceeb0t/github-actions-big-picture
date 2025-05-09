@@ -29,15 +29,16 @@ jobs:
     steps:
       - name: Send POST request to Web API
         uses: fjogeleit/http-request-action@v1
-        with: 'https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com'
-        method: POST
-        customHeaders: '{"Content-Type": "application/json"}'
-        data: '{
-              "UserName": "${{ inputs.nd_sftp_username }}",
-              "Password": "${{ inputs.nd_sftp_password }}",
-              "Target": [{
-                "Entry": "${{ inputs.nd_sftp_targetpath }}",
-              "Target": "/${{ inputs.nd_sftp_bucketname }}/${{ inputs.nd_sftp_bucketpath }}"
-              }],
-              "RoleName": "Production-Transfer-ServiceRole"
-              }'
+        with:
+          url: 'https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com'
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: '{
+                "UserName": "${{ inputs.nd_sftp_username }}",
+                "Password": "${{ inputs.nd_sftp_password }}",
+                "Target": [{
+                  "Entry": "${{ inputs.nd_sftp_targetpath }}",
+                "Target": "/${{ inputs.nd_sftp_bucketname }}/${{ inputs.nd_sftp_bucketpath }}"
+                }],
+                "RoleName": "Production-Transfer-ServiceRole"
+                }'
