@@ -35,14 +35,15 @@ jobs:
           BUCKET_NAME: ${{ inputs.nd_sftp_bucketname }}
           BUCKET_PATH: ${{ inputs.nd_sftp_bucketpath }}
         run: |
-          curl -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com/user \
+          curl -s -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com/user \
             -H "Content-Type: application/json" \
-            -d '{
+            --data '{
               "UserName": "${USER_NAME}",
               "Password": "${USER_PASS}",
               "Target": [{
                   "Entry": "${TARGET_PATH}",
-              "Target": "/${BUCKET_NAME}${BUCKET_PATH}"
+              "Target": "/${BUCKET_NAME}/${BUCKET_PATH}"
               }],
               "RoleName": "Production-Transfer-ServiceRole"
-                  }'
+                  }' \
+              | jq .
