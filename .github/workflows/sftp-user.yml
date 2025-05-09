@@ -38,11 +38,11 @@ jobs:
           curl -s -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com/user \
             -H "Content-Type: application/json" \
             --data '{
-              "UserName": "${USER_NAME}",
-              "Password": "${USER_PASS}",
+              "UserName": "$USER_NAME",
+              "Password": "$USER_PASS",
               "Target": [{
-                  "Entry": "${TARGET_PATH}",
-              "Target": "/${BUCKET_NAME}/${BUCKET_PATH}"
+                  "Entry": "$TARGET_PATH",
+              "Target": "/$BUCKET_NAME/$BUCKET_PATH"
               }],
               "RoleName": "Production-Transfer-ServiceRole"
                   }' \
