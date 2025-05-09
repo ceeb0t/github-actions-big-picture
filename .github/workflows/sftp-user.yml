@@ -28,11 +28,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send POST request to Web API
-        run: |
-          TEMP="$(mktemp)"
-          trap "rm -f $TEMP" exit
-          $TEMP << END_OF_FILE
-          {
+        uses: fjogeleit/http-request-action@v1
+        with: 'https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com'
+        method: POST
+        customHeaders: '{"Content-Type": "application/json"}'
+        data: '{
               "UserName": "${{ inputs.nd_sftp_username }}",
               "Password": "${{ inputs.nd_sftp_password }}",
               "Target": [{
@@ -40,9 +40,4 @@ jobs:
               "Target": "/${{ inputs.nd_sftp_bucketname }}/${{ inputs.nd_sftp_bucketpath }}"
               }],
               "RoleName": "Production-Transfer-ServiceRole"
-            }'
-            END_OF_FILE
-
-          curl -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com \
-            -H "Content-Type: application/json" \
-            -data @$TEMP
+              }'
