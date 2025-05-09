@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Send POST request to Web API
         run: |
+          TEMP="$(mktemp)"
+          trap "rm -f $TEMP" exit
           $TEMP << END_OF_FILE
           {
               "UserName": "${{ inputs.nd_sftp_username }}",
