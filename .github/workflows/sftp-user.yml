@@ -28,13 +28,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send POST request to Web API
-        run: |
-          echo "Username: $USERNAME"
-          echo "Password: $PASSWORD"
-          echo "TargetPath: $TARGETPATH"
         env:
-          USERNAME: ${{ inputs.nd_sftp_username }}
-          PASSWORD: ${{ inputs.nd_sftp_password }}
-          TARGETPATH: ${{ inputs.nd_sftp_targetpath }}
-          BUCKETNAME: ${{ inputs.nd_sftp_bucketname }}
-          BUCKETPATH: ${{ inputs.nd_sftp_bucketpath }}
+          USER_NAME: ${{ inputs.nd_sftp_username }}
+          USER_PASS: ${{ inputs.nd_sftp_password }}
+          TARGET_PATH: ${{ inputs.nd_sftp_targetpath }}
+          BUCKET_NAME: ${{ inputs.nd_sftp_bucketname }}
+          BUCKET_PATH: ${{ inputs.nd_sftp_bucketpath }}
+        run: |
+          curl -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com \
+            -H "Content-Type: application/json" \
+            -d '{
+              "UserName": "${USER_NAME}",
+              "Password": "${USER_PASS}",
+              "Target": [{
+                  "Entry": "${TARGET_PATH}",
+              "Target": "/${BUCKET_NAME}${BUCKET_PATH}"
+              }],
+              "RoleName": "Production-Transfer-ServiceRole"
+                  }'
