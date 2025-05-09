@@ -1,0 +1,39 @@
+name: Send Data to NetDirector SFTP Web API
+on:
+  workflow_dispatch:
+    inputs:
+          nd_sftp_username:
+            type: string
+            description: Username to be created
+            required: true
+          nd_sftp_bucketname:
+            type: string
+            description: Bucket Name
+            required: true
+          nd_sftp_targetpath:
+            type: string
+            description: Target path if not root
+            required: true
+            default: /
+          nd_sftp_bucketpath:
+            type: string
+            description: Bucket path required
+            required: true
+jobs:
+  send-data:
+    runs-on:
+      group: ${{ vars.RUNNER_SMALL_GROUP_NAME }}
+    steps:
+      - name: Send POST request to Web API
+        run: |
+          curl -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com \
+            -H "Content-Type: application/json" \
+            -d '{
+              "UserName": "${{ inputs.nd_sftp_username }}",
+              "Password": "${USER_PASS}",
+              "Target": [{
+                "Entry": "${{ inputs.nd_sftp_targetpath }}",
+                "Target": "/${{ inputs.nd_sftp_bucketname }}/${{ inputs.nd_sftp_bucketpath }}"
+              }],
+              "RoleName": "Production-Transfer-ServiceRole"
+            }'
