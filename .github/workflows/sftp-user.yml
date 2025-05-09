@@ -29,7 +29,6 @@ jobs:
     steps:
       - name: Send POST request to Web API
         run: |
-          if [ "${{ inputs.nd_sftp_password }}" == "" ]; then ${{ inputs.nd_sftp_password }}=$(pwgen 30 1); fi
           curl -X POST https://k6bw01xogf.execute-api.eu-west-1.amazonaws.com \
             -H "Content-Type: application/json" \
             -d '{
